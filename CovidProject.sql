@@ -42,7 +42,7 @@ WHERE total_cases <> 0 AND total_deaths <> 0
 ORDER BY 1, 2
 
 
--- Population/cases so we can see the percentage of the population that got covid for each country
+-- Population/cases so we can observe the increase in the percentage of cases over time by country.
 SELECT 
 	location, 
 	date, 
@@ -51,6 +51,7 @@ SELECT
 	(CAST(total_cases AS NUMERIC)/CAST(population AS NUMERIC))*100 AS percentage_cases
 FROM dbo.deaths
 WHERE total_cases <> 0
+	AND location NOT IN ('World', 'High income', 'Upper middle income', 'Europe', 'North America', 'Asia', 'South America', 'Lower middle income', 'European Union', 'Africa', 'Oceania')
 	-- AND location = 'Mexico'
 ORDER BY 1, 2
 
@@ -62,6 +63,7 @@ SELECT -- TOP 10
 	MAX(total_cases) AS max_cases, 
 	MAX(CAST(total_cases AS NUMERIC)/CAST(population AS NUMERIC))*100 AS population_infected
 FROM dbo.deaths
+WHERE location NOT IN ('World', 'High income', 'Upper middle income', 'Europe', 'North America', 'Asia', 'South America', 'Lower middle income', 'European Union', 'Africa', 'Oceania')
 GROUP BY location, population
 ORDER BY 4 DESC
 
@@ -92,6 +94,7 @@ SELECT
 	SUM(CAST(new_deaths AS NUMERIC)) AS total_deaths, 
 	SUM(CAST(new_deaths AS NUMERIC))/SUM(CAST(new_cases AS NUMERIC))*100 AS DeathPercentage
 FROM dbo.deaths
+WHERE location = 'World'
 ORDER BY 1
 
 
